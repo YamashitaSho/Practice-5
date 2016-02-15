@@ -67,14 +67,14 @@ int main(){
 //構造体pをDATA_NUM分NULLで埋める---------------------------------------------------
 void struct_init(user_t *p){
 	for(int i=0; i < DATA_NUM ; i++){
-		strcpy((p+i)->name,"\0");
-		strcpy((p+i)->ruby,"\0");
-		strcpy((p+i)->phone,"\0");
+		strcpy( (p+i)->name,"\0" );
+		strcpy( (p+i)->ruby,"\0" );
+		strcpy( (p+i)->phone,"\0" );
 	}
 }
 
 //FILENAMEのファイルを構造体pに読み込む----------------------------------------------
-int struct_load(user_t *p ,char *file){
+int struct_load(user_t *p ,char *file ) {
 	char buf[120];
 	memset( buf , '\0' , 120 );					//buf[119]まで'\0'埋め
 	char *buf_p;
@@ -85,15 +85,15 @@ int struct_load(user_t *p ,char *file){
 		return FILE_ERROR;
 	}
 	int i=0;
-	while(fgets(buf , 119 , fp) != NULL){		//NULLまで1行ごとに読み込む(最大119バイト→120バイト目は必ず'\0'になっている→strtokでバッファオーバーフローする心配はない)
+	while( fgets(buf , 119 , fp) != NULL ){		//NULLまで1行ごとに読み込む(最大119バイト→120バイト目は必ず'\0'になっている→strtokでバッファオーバーフローする心配はない)
 		
-		if ((memchr(buf, '\n', 119) == 0) && (memchr(buf, '\0', 119) == 0)){
+		if ( (memchr(buf, '\n', 119) == 0) && (memchr(buf, '\0', 119) == 0) ){
 			return FILETYPE_ERROR;				//bufの120バイト目までに改行コードまたはNULLがない場合エラー
 		}
 		
-		buf_p = strtok(buf,",");				//もし","がいなくても119バイトで止まる
+		buf_p = strtok( buf , "," );				//もし","がいなくても119バイトで止まる
 		if (buf_p != 0) {						//","が見つかっていた場合
-			strncpy( (p+i)->name , buf_p ,49);	//buf_pが示す値を49バイトまでコピー(50バイトまで初期化してある)
+			strncpy( (p+i)->name , buf_p ,49 );	//buf_pが示す値を49バイトまでコピー(50バイトまで初期化してある)
 		} else {								//見つからないならファイル形式エラー
 			return FILETYPE_ERROR;
 		}
@@ -109,7 +109,7 @@ int struct_load(user_t *p ,char *file){
 		buf_p=strtok(NULL,"\n");				//構造体の3つ目の区切り文字は改行コード
 		if (buf_p != 0){
 			(p+i)->name[49] = '\0';
-			strncpy( (p+i)->phone , buf_p ,19);
+			strncpy( (p+i)->phone , buf_p ,19 );
 		} else {
 			return FILETYPE_ERROR;
 		}
@@ -124,9 +124,9 @@ int struct_load(user_t *p ,char *file){
 //構造体の内容を表示する------------------------------------------------------------
 void struct_print(user_t *p){
 	int i=0;
-	printf("構造体の内容を表示します。\n");
+	printf( "構造体の内容を表示します。\n" );
 	while(strcmp((p+i)->name,"\0") != 0){
-		printf("氏名:%s\nかな:%s\nTEL :%s\n",(p+i)->name,(p+i)->ruby,(p+i)->phone);
+		printf("氏名:%s\nかな:%s\nTEL :%s\n" , (p+i)->name , (p+i)->ruby , (p+i)->phone);
 		i++;
 		if (i > DATA_NUM){
 			break;
@@ -147,6 +147,7 @@ void error_msg(int err){
 	  case FILETYPE_ERROR:
 		printf("ファイル形式に問題があります。\n");
 		break;
+		
 	  default:
 		printf("不明なエラーが発生しました。\n");
 		break;
